@@ -23,17 +23,7 @@ public class I2Application implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
-		Professeur etud=new Professeur();
-		etud.setUsername("aymen");
-		etud.setPassword("azertyuiop");
-		Quizz qq = new Quizz();
-		qq.setDuration(5);
-		qq.setStarted(true);
-		qq.setTitle("dz");
-		List<Quizz> ls = new ArrayList<Quizz>();
-		ls.add(qq);
-		etud.setCreatedQuizzes(ls);
-		rep.save(etud);
+		
 	}
 
 }
