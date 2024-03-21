@@ -1,0 +1,24 @@
+package com.quizz.i2.entities;
+
+import java.util.List;
+
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Entity
+@DiscriminatorValue(value = "ETUD")
+public class Etudiant extends Utilisateur{
+    
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "stud_id")
+    private List<QuizzAttempt> takenQuizzes;
+}
