@@ -33,7 +33,8 @@ public class professeurService {
         return quizzRep.save(quizz);
     }
     public void consulterScore(Professeur prof, Quizz quizz, Etudiant etudiant){
-        quizzAttemptRep.findByEtudiantId(etudiant.getId());
+        QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId());
+        quizzAttempt
     }
 
 }
