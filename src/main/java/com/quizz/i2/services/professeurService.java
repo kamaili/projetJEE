@@ -7,8 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import com.quizz.i2.entities.Etudiant;
 import com.quizz.i2.entities.Professeur;
 import com.quizz.i2.entities.Quizz;
+import com.quizz.i2.entities.QuizzAttempt;
 import com.quizz.i2.repositories.EtudiantRepository;
 import com.quizz.i2.repositories.ProfesseurRepository;
+import com.quizz.i2.repositories.QuizzAttemptRepository;
 import com.quizz.i2.repositories.QuizzRepository;
 
 
@@ -19,7 +21,7 @@ public class professeurService {
     @Autowired
     private QuizzRepository quizzRep;
     @Autowired
-    private EtudiantRepository etudRep;
+    private QuizzAttemptRepository quizzAttemptRep;
 
     public Professeur enregistrerProfesseur(Professeur prof){
         return profRep.save(prof);
@@ -30,7 +32,8 @@ public class professeurService {
     public Quizz createQuizz(Professeur prof, Quizz quizz){
         return quizzRep.save(quizz);
     }
-    public void consulterScore(Professeur prof, Quizz quizz){
+    public void consulterScore(Professeur prof, Quizz quizz, Etudiant etudiant){
+        quizzAttemptRep.findByEtudiantId(etudiant.getId());
     }
 
 }
