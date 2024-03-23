@@ -31,27 +31,24 @@ public class EtudiantServicesImpl implements EtudiantServices{
 	}
 
 
-	public int consultScore(Etudiant e, QuizzAttempt q) {
-        QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId());
+	public int consultScore(Etudiant etudiant, QuizzAttempt quizz) {
+        /*QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId());
         List<Answer> answers = quizzAttempt.getAnswers();
         int totalscore=0;
         for (Answer answer:answers){
             if(answer.getSelectedAnswer() == answer.getQuestion().getCorrect_answer())
                 totalscore +=answer.getQuestion().getValue();
         }
-        return totalCorrect;
+        return totalscore;*/ return 0;
     }
-		
-		
-	}
 
 
 	public void rejoindreQuizz(Etudiant e, String token) {
-		Quizz q= quizzRep.findQuizzByToken(token);
-		List l;
+		/*Quizz q= quizzRep.findByToken(token);
+		List<Quizz> l;
 		l=e.getTakenQuizzes();
 		l.add(q);
-		e.setTakenQuizzes(l);
+		e.setTakenQuizzes(l);*/
 	}
 
 
@@ -62,6 +59,13 @@ public class EtudiantServicesImpl implements EtudiantServices{
 	public void modifyEtudiant(Etudiant e) {
 		
 		
+	}
+
+
+	@Override
+	public int consultScore(Etudiant e, Quizz q) {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'consultScore'");
 	}
 
 	

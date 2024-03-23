@@ -5,10 +5,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import com.quizz.i2.entities.Quizz;
+import java.util.List;
+import java.util.Optional;
+
 
 public interface QuizzRepository extends JpaRepository<Quizz, Long>{
-	@Query("select q from Quizz q where q.token = :t")
-	Quizz findQuizzByToken(@Param("t")String token);
+
+	//fonction prédifinie
+	Quizz findByToken(String token);
 	
 
 }

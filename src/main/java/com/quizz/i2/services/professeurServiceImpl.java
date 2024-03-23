@@ -33,14 +33,14 @@ public class professeurServiceImpl implements professeurService{
         return quizzRep.save(quizz);
     }
     public int consulterScore(Professeur prof, Quizz quizz, Etudiant etudiant){
-        QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId());
+        /*QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId());
         List<Answer> answers = quizzAttempt.getAnswers();
         int totalCorrect=0;
         for (Answer answer:answers){
             if(answer.getSelectedAnswer() == answer.getQuestion().getCorrect_answer())
                 totalCorrect++;
         }
-        return totalCorrect;
+        return totalCorrect;*/return 0;
     }
 
 }
