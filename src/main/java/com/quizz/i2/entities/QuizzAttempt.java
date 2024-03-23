@@ -1,11 +1,16 @@
 package com.quizz.i2.entities;
 
 import java.util.Date;
+import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,4 +27,13 @@ public class QuizzAttempt {
 
     private Date startedAt;
     private Date finishedAt;
+    private boolean isPassed;
+    
+    @ManyToOne
+    private Quizz quizz;
+    @ManyToOne
+    private Etudiant etudiant;
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "quizz_attempt_id")
+    List<Answer> answers;
 }

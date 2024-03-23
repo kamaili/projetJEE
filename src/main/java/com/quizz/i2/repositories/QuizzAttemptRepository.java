@@ -6,4 +6,6 @@ import com.quizz.i2.entities.QuizzAttempt;
 
 public interface QuizzAttemptRepository extends JpaRepository<QuizzAttempt, Long>{
 
+    QuizzAttempt findByEtudiantIdAndQuizzId(Long idEtudiant, Long idQuizz);
+
 }

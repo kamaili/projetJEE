@@ -18,7 +18,6 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue(value = "ETUD")
 public class Etudiant extends Utilisateur{
     
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "stud_id")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "etudiant")
     private List<QuizzAttempt> takenQuizzes;
 }
