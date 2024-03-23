@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.quizz.i2.entities.Answer;
+import com.quizz.i2.entities.Choice;
 import com.quizz.i2.entities.Etudiant;
 import com.quizz.i2.entities.Quizz;
 import com.quizz.i2.entities.QuizzAttempt;
@@ -24,50 +25,53 @@ public class EtudiantServicesImpl implements EtudiantServices{
     @Autowired
     private QuizzAttemptRepository quizzAttemptRep;
 	
-	public void SaveEtudiant(Etudiant e) {
-		etRep.save(e);
+	
+	public void SaveEtudiant(Etudiant etudiant) {
+		etRep.save(etudiant);
 		System.out.println("Etudiant ajouter avec success !! ");
 		
 	}
 
 
-	public int consultScore(Etudiant etudiant, QuizzAttempt quizz) {
-        /*QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId());
+	
+
+
+	public void rejoindreQuizz(Etudiant etudiant, String token) {
+		Quizz quizz= quizzRep.findByToken(token).orElseThrow(() -> new RuntimeException("Quizz not found"));
+		QuizzAttempt newTakenQuizz = new QuizzAttempt();
+		newTakenQuizz.setQuizz(quizz);
+		etudiant.getTakenQuizzes().add(newTakenQuizz);
+		etRep.save(etudiant);
+		System.out.println("QuizzAttempt added successfully !! ");
+	}
+
+
+	public void QuitterQuiz(Etudiant etudiant,QuizzAttempt quizzAttempt) {
+		
+		etudiant.getTakenQuizzes().remove(quizzAttempt);
+		etRep.save(etudiant);
+		System.out.println("QuizzAttempt removed successfully !! ");
+	}
+
+	public void modifyEtudiant(Etudiant etudiant) {
+		etRep.save(etudiant);
+		System.out.println("Etudiant modifié avec success !! ");
+	}
+
+	public int consulterScore(Etudiant etudiant, Quizz quizz) {
+		QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId());
         List<Answer> answers = quizzAttempt.getAnswers();
-        int totalscore=0;
+        int totalCorrect=0;
         for (Answer answer:answers){
-            if(answer.getSelectedAnswer() == answer.getQuestion().getCorrect_answer())
-                totalscore +=answer.getQuestion().getValue();
+            List<Choice> choices = answer.getSelectedChoices();
+            for (Choice choice:choices){
+                if(! choice.isCorrect()){
+                    totalCorrect--; // soustraire 1 ici et l'ajouter après ==> 0 
+                    break;
+                }
+            }
+            totalCorrect++; // toujours ajouter 1 (si la réponse est fausse ce "1" est déja soustrait ci-dissus) 
         }
-        return totalscore;*/ return 0;
-    }
-
-
-	public void rejoindreQuizz(Etudiant e, String token) {
-		/*Quizz q= quizzRep.findByToken(token);
-		List<Quizz> l;
-		l=e.getTakenQuizzes();
-		l.add(q);
-		e.setTakenQuizzes(l);*/
+        return totalCorrect;
 	}
-
-
-	public void QuitterQuiz() {
-		
-	}
-
-	public void modifyEtudiant(Etudiant e) {
-		
-		
-	}
-
-
-	@Override
-	public int consultScore(Etudiant e, Quizz q) {
-		// TODO Auto-generated method stub
-		throw new UnsupportedOperationException("Unimplemented method 'consultScore'");
-	}
-
-	
-	
 }

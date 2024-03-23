@@ -11,8 +11,9 @@ import java.util.Optional;
 
 public interface QuizzRepository extends JpaRepository<Quizz, Long>{
 
+    
 	//fonction prédifinie
-	Quizz findByToken(String token);
+	Optional<Quizz> findByToken(String token);
 	
 
 }
