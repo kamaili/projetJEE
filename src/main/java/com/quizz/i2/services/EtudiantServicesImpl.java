@@ -31,11 +31,6 @@ public class EtudiantServicesImpl implements EtudiantServices{
 		System.out.println("Etudiant ajouter avec success !! ");
 		
 	}
-
-
-	
-
-
 	public void rejoindreQuizz(Etudiant etudiant, String token) {
 		Quizz quizz= quizzRep.findByToken(token).orElseThrow(() -> new RuntimeException("Quizz not found"));
 		QuizzAttempt newTakenQuizz = new QuizzAttempt();

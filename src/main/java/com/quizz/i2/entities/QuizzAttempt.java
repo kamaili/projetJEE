@@ -32,7 +32,6 @@ public class QuizzAttempt {
     private Quizz quizz;
     @ManyToOne
     private Etudiant etudiant;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "quizz_attempt_id")
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "quizzAttempt")
     List<Answer> answers;
 }
