@@ -1,4 +1,4 @@
-package com.quizz.i2.entities;
+ package com.quizz.i2.entities;
 
 import java.util.List;
 
@@ -20,4 +20,6 @@ public class Etudiant extends Utilisateur{
     
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "etudiant")
     private List<QuizzAttempt> takenQuizzes;
+
+
 }
