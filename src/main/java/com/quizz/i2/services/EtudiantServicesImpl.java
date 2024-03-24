@@ -26,9 +26,13 @@ public class EtudiantServicesImpl implements EtudiantServices{
     private QuizzAttemptRepository quizzAttemptRep;
 	
 	
-	public void SaveEtudiant(Etudiant etudiant) {
-		etRep.save(etudiant);
-		System.out.println("Etudiant ajouter avec success !! ");
+	public Etudiant SaveEtudiant(Etudiant etudiant) {
+		
+		if(etRep.existsByUsername(etudiant.getUsername())){
+			System.out.println("coordonnées existes !! ");
+			return null;
+		}
+		return etRep.save(etudiant);
 		
 	}
 	public void rejoindreQuizz(Etudiant etudiant, String token) {
@@ -48,9 +52,12 @@ public class EtudiantServicesImpl implements EtudiantServices{
 		System.out.println("QuizzAttempt removed successfully !! ");
 	}
 
-	public void modifyEtudiant(Etudiant etudiant) {
-		etRep.save(etudiant);
-		System.out.println("Etudiant modifié avec success !! ");
+	public Etudiant modifyEtudiant(Etudiant etudiant) {
+		if(etRep.existsByUsername(etudiant.getUsername())){
+			System.out.println("coordonnées existes !! ");
+			return null;
+		}
+		return etRep.save(etudiant);
 	}
 
 	public int consulterScore(Etudiant etudiant, Quizz quizz) {

@@ -21,9 +21,17 @@ public class ProfesseurServiceImpl implements ProfesseurServices{
     EtudiantServices etudServices;
 
     public Professeur enregistrerProfesseur(Professeur prof){
+        if(profRep.existsByUsername(prof.getUsername())){
+			System.out.println("username existes !! ");
+			return null;
+		}
         return profRep.save(prof);
     }
     public Professeur modifierProfesseur(Professeur prof){
+        if(profRep.existsByUsername(prof.getUsername())){
+			System.out.println("username existes !! ");
+			return null;
+		}
         return profRep.save(prof);
     }
     public Quizz createQuizz(Professeur prof, Quizz quizz){

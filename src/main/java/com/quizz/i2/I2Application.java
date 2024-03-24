@@ -45,11 +45,12 @@ public class I2Application implements CommandLineRunner {
 		etud.setUsername("aymen");
 		etud.setPassword("123456");
 		eSer.SaveEtudiant(etud);
+
 		Quizz quizz = new Quizz(null, "siwar", 60, "asvddgfr", false, prof, null);
 		pSer.enregistrerProfesseur(prof);
 		pSer.createQuizz(prof, quizz);
+
 		Question question = new Question();
-		
 		Choice choice = new Choice(null, "YARN + HDFS", true,question);
 		Choice choice2 = new Choice(null, "KAFKA + HDFS", false,question);
 		List<Choice> ls = new ArrayList<>();
@@ -57,6 +58,17 @@ public class I2Application implements CommandLineRunner {
 		question.setQuizz(quizz);
 		question.setChoices(ls);
 		question.setText("c'est quoi hadoop");
+
+		Question question2 = new Question();
+		Choice choice0 = new Choice(null, "in memory", true,question2);
+		Choice choice20 = new Choice(null, "in disk", false,question2);
+		List<Choice> ls0 = new ArrayList<>();
+		ls0.add(choice0);ls0.add(choice20);
+		question2.setQuizz(quizz);
+		question2.setChoices(ls0);
+		question2.setText("c'est quoi spark");
+
+		qSer.ajouterQuestion(quizz, question2);
 		qSer.ajouterQuestion(quizz, question);
 		
 	}
