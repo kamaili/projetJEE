@@ -4,10 +4,12 @@ import java.util.List;
 
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -27,7 +29,10 @@ public class Quizz {
     private int duration;
     private String token;
     private boolean started;
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "quizz_id")
+
+    @ManyToOne
+    private Professeur professeur;
+
+    @OneToMany(cascade = CascadeType.ALL,mappedBy = "quizz", fetch = FetchType.EAGER)
     private List<Question> questions;
 }

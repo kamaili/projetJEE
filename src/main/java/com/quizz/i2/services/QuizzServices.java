@@ -1,7 +1,10 @@
 package com.quizz.i2.services;
 
+import org.springframework.stereotype.Service;
+
 import com.quizz.i2.entities.Question;
 import com.quizz.i2.entities.Quizz;
+
 
 public interface QuizzServices {
     public void commencerQuizz(Quizz quizz);

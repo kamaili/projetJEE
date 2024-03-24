@@ -1,14 +1,16 @@
 package com.quizz.i2.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 import com.quizz.i2.entities.Etudiant;
 import com.quizz.i2.entities.Professeur;
 import com.quizz.i2.entities.Quizz;
 import com.quizz.i2.repositories.ProfesseurRepository;
 import com.quizz.i2.repositories.QuizzRepository;
 
-
-public class professeurServiceImpl implements professeurService{
+@Service
+public class ProfesseurServiceImpl implements ProfesseurServices{
 
     @Autowired
     private ProfesseurRepository profRep;

@@ -20,7 +20,6 @@ import lombok.NoArgsConstructor;
 public class Professeur extends Utilisateur{
 
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "prof_id")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "professeur")
     private List<Quizz> createdQuizzes;
 }
