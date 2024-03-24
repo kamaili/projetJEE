@@ -14,10 +14,9 @@ import com.quizz.i2.entities.Etudiant;
 import com.quizz.i2.entities.Professeur;
 import com.quizz.i2.entities.Question;
 import com.quizz.i2.entities.Quizz;
-import com.quizz.i2.repositories.EtudiantRepository;
-import com.quizz.i2.repositories.ProfesseurRepository;
 import com.quizz.i2.services.EtudiantServices;
 import com.quizz.i2.services.ProfesseurServices;
+import com.quizz.i2.services.QuizzAttemptServices;
 import com.quizz.i2.services.QuizzServices;
 
 @SpringBootApplication
@@ -29,6 +28,8 @@ public class I2Application implements CommandLineRunner {
 	EtudiantServices eSer;
 	@Autowired
 	QuizzServices qSer;
+	@Autowired
+	QuizzAttemptServices qaSer;
 
 
 	public static void main(String[] args) {
@@ -71,6 +72,7 @@ public class I2Application implements CommandLineRunner {
 		qSer.ajouterQuestion(quizz, question2);
 		qSer.ajouterQuestion(quizz, question);
 		
+		eSer.rejoindreQuizz(etud, "asvddgfr");
 	}
 
 }
