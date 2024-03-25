@@ -17,9 +17,15 @@ public class QuizzAttemptServicesImpl implements QuizzAttemptServices{
 
     @Autowired
     private AnswerRepository answerRep;
+    @Autowired
+    QuizzAttemptRepository quizzAttemptRep;
 
     public void setAnswer(QuizzAttempt quizzAttempt, Question question, List<Choice> choices) {
        Answer answer = answerRep.findByQuestionIdAndQuizzAttemptId(quizzAttempt.getId(),question.getId());
+       if(answer == null){
+        QuizzAttempt qAttempt = quizzAttemptRep.findById(1L).orElseThrow(() -> new RuntimeException("QuizzAttempt not found"));
+        answer = new Answer(null, choices, question, qAttempt);
+       }
        answer.setSelectedChoices(choices);
        answerRep.save(answer);
     }

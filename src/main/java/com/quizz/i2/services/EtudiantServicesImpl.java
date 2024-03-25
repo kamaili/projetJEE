@@ -35,14 +35,15 @@ public class EtudiantServicesImpl implements EtudiantServices{
 		return etRep.save(etudiant);
 		
 	}
-	public void rejoindreQuizz(Etudiant etudiant, String token) {
+	public QuizzAttempt rejoindreQuizz(Etudiant etudiant, String token) {
 		Quizz quizz= quizzRep.findByToken(token).orElseThrow(() -> new RuntimeException("Quizz not found"));
 		QuizzAttempt newTakenQuizz = new QuizzAttempt();
 		newTakenQuizz.setQuizz(quizz);
 		newTakenQuizz.setEtudiant(etudiant);
-		etudiant.getTakenQuizzes().add(newTakenQuizz);
+		QuizzAttempt savedQuizzAttempt = quizzAttemptRep.save(newTakenQuizz);
+		etudiant.getTakenQuizzes().add(savedQuizzAttempt);
 		etRep.save(etudiant);
-		System.out.println("QuizzAttempt added successfully !! ");
+		return savedQuizzAttempt;
 	}
 
 
