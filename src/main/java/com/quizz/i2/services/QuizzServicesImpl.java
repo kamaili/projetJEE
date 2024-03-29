@@ -37,7 +37,6 @@ public class QuizzServicesImpl implements QuizzServices{
         Quizz q = quizzRep.findById(quizz.getId()).orElseThrow(() -> new RuntimeException("Quizz not found"));
         question.setQuizz(q);
         qr.save(question);
-        //Hibernate.initialize(q.getQuestions()); // Initialize the questions collection
         q.getQuestions().add(question);
         quizzRep.save(quizz);
         System.out.println(q.getQuestions());

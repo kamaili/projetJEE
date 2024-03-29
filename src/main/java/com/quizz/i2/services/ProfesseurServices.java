@@ -1,8 +1,5 @@
 package com.quizz.i2.services;
 
-import org.springframework.stereotype.Service;
-
-import com.quizz.i2.entities.Etudiant;
 import com.quizz.i2.entities.Professeur;
 import com.quizz.i2.entities.Quizz;
 
@@ -10,6 +7,9 @@ import com.quizz.i2.entities.Quizz;
 public interface ProfesseurServices {
     public Professeur enregistrerProfesseur(Professeur prof);
     public Professeur modifierProfesseur(Professeur prof);
-    public Quizz createQuizz(Professeur prof, Quizz quizz);
+    public void createQuizz(Professeur prof, Quizz quizz);
+    public void deleteQuizz(Professeur prof, Quizz quizz);
+    /* method removed
     public int consulterScore(Professeur prof, Quizz quizz, Etudiant etudiant);
+    */
 }

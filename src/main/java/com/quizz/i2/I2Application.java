@@ -42,7 +42,7 @@ public class I2Application implements CommandLineRunner {
 	@Override
 	public void run(String... args) throws Exception {
 		
-		Professeur prof = new Professeur();
+		/*Professeur prof = new Professeur();
 		prof.setUsername("ben aouicha");
 		prof.setPassword("123456");
 		Etudiant etud = new Etudiant();
@@ -80,7 +80,7 @@ public class I2Application implements CommandLineRunner {
 		qaSer.setAnswer(qa, question2, ls0.subList(0, 1));
 		
 		System.out.println("***************"+eSer.consulterScore(etud, quizz)+"******************");
-		
+	*/
 	}
 
 }

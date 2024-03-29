@@ -1,7 +1,7 @@
 package com.quizz.i2.services;
 
 import java.util.List;
-
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,16 +27,18 @@ public class EtudiantServicesImpl implements EtudiantServices{
 	
 	
 	public Etudiant SaveEtudiant(Etudiant etudiant) {
-		
 		if(etRep.existsByUsername(etudiant.getUsername())){
-			System.out.println("coordonnées existes !! ");
-			return null;
+			throw new RuntimeException("Username already exists !!");
 		}
 		return etRep.save(etudiant);
-		
 	}
 	public QuizzAttempt rejoindreQuizz(Etudiant etudiant, String token) {
 		Quizz quizz= quizzRep.findByToken(token).orElseThrow(() -> new RuntimeException("Quizz not found"));
+		// vérifier d'abord que cet etudiant n'est pas déjà rejoint ce quizz
+		Optional<QuizzAttempt> quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId());
+		if(quizzAttempt.isPresent())
+			throw new RuntimeException("Quizz already joined by this student");
+
 		QuizzAttempt newTakenQuizz = new QuizzAttempt();
 		newTakenQuizz.setQuizz(quizz);
 		newTakenQuizz.setEtudiant(etudiant);
@@ -47,23 +49,26 @@ public class EtudiantServicesImpl implements EtudiantServices{
 	}
 
 
-	public void QuitterQuiz(Etudiant etudiant,QuizzAttempt quizzAttempt) {
+	public void QuitterQuiz(Etudiant etudiant,Quizz quizz) {
+		QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId()).orElseThrow(() -> new RuntimeException("this student not taked this quizz")); 
 		
+		if(! etudiant.getTakenQuizzes().contains(quizzAttempt))
+			throw new RuntimeException("quizz not joined before");
 		etudiant.getTakenQuizzes().remove(quizzAttempt);
+		quizzAttemptRep.delete(quizzAttempt);
 		etRep.save(etudiant);
-		System.out.println("QuizzAttempt removed successfully !! ");
+		System.out.println("QuizzAttempt removed successfully !! \n"+etudiant.getTakenQuizzes().size());
 	}
 
 	public Etudiant modifyEtudiant(Etudiant etudiant) {
 		if(etRep.existsByUsername(etudiant.getUsername())){
-			System.out.println("coordonnées existes !! ");
-			return null;
+			throw new RuntimeException("The new username already exists !!");
 		}
 		return etRep.save(etudiant);
 	}
 
 	public int consulterScore(Etudiant etudiant, Quizz quizz) {
-		QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId());
+		QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId()).orElseThrow(() -> new RuntimeException("this student not taked this quizz"));
         List<Answer> answers = quizzAttempt.getAnswers();
         int totalCorrect=0;
         for (Answer answer:answers){
