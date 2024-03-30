@@ -1,9 +1,12 @@
 package com.quizz.i2.services;
 
+import java.util.List;
+
 import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.quizz.i2.entities.Choice;
 import com.quizz.i2.entities.Question;
 import com.quizz.i2.entities.Quizz;
 import com.quizz.i2.repositories.QuestionRepository;
@@ -15,39 +18,34 @@ public class QuizzServicesImpl implements QuizzServices{
     @Autowired
     QuizzRepository quizzRep;
     @Autowired
-        QuestionRepository qr;
+    QuestionRepository questionRep;
         
 
     @Override
     public void commencerQuizz(Quizz quizz) {
-        Quizz q = quizzRep.findById(quizz.getId()).orElseThrow(() -> new RuntimeException("Quizz not found"));
-        q.setStarted(true);
-        quizzRep.save(q);
+        quizz.setStarted(true);
+        quizzRep.save(quizz);
     }
 
     @Override
     public void arreterQuizz(Quizz quizz) {
-        Quizz q = quizzRep.findById(quizz.getId()).orElseThrow(() -> new RuntimeException("Quizz not found"));
-        q.setStarted(false);
-        quizzRep.save(q);
+        quizz.setStarted(false);
+        quizzRep.save(quizz);
     }
 
     @Override
-    public void ajouterQuestion(Quizz quizz, Question question) {
-        Quizz q = quizzRep.findById(quizz.getId()).orElseThrow(() -> new RuntimeException("Quizz not found"));
-        question.setQuizz(q);
-        qr.save(question);
-        q.getQuestions().add(question);
+    public void ajouterQuestion(Quizz quizz, Question question, List<Choice> choices) {
+        question.setQuizz(quizz);
+        question.setChoices(choices);
+        questionRep.save(question);
+        quizz.getQuestions().add(question);
         quizzRep.save(quizz);
-        System.out.println(q.getQuestions());
     }
 
     @Override
     public void supprimerQuestion(Quizz quizz, Question question) {
-        Quizz q = quizzRep.findById(quizz.getId()).orElseThrow(() -> new RuntimeException("Quizz not found"));
-        q.getQuestions().remove(question);
+        quizz.getQuestions().remove(question);
         quizzRep.save(quizz);
+        questionRep.delete(question);
     }
-
-
 }

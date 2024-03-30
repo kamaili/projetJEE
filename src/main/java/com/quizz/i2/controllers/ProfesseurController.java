@@ -38,8 +38,8 @@ public class ProfesseurController {
         }
         return ResponseEntity.ok(prof);
     }
-    @PostMapping("/modify")
-    public ResponseEntity<?> modifyStudent(@RequestBody Professeur professeur) {
+    @PostMapping("/update")
+    public ResponseEntity<?> modifierProfesseur(@RequestBody Professeur professeur) {
         Optional<Professeur> prof = profRep.findById(professeur.getId());
         if (! prof.isPresent()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
@@ -54,7 +54,7 @@ public class ProfesseurController {
         return ResponseEntity.ok(newProf);
     }
 
-    @PostMapping("/{professeurId}/quizz")
+    @PostMapping("/{professeurId}/createquizz")
     public ResponseEntity<?> createQuizz(@PathVariable Long professeurId, @RequestBody Quizz quizz) {
         Optional<Professeur> prof = profRep.findById(professeurId);
         if(! prof.isPresent())
@@ -63,7 +63,7 @@ public class ProfesseurController {
         return ResponseEntity.ok("quizz created");
     }
 
-    @DeleteMapping("/{professeurId}/quizz/{quizzId}")
+    @DeleteMapping("/{professeurId}/deletequizz/{quizzId}")
     public ResponseEntity<?> deleteQuizz(@PathVariable Long professeurId, @PathVariable Long quizzId) {
         Optional<Professeur> prof = profRep.findById(professeurId);
         Optional<Quizz> quizz = quizzRep.findById(quizzId);
