@@ -1,22 +1,9 @@
 package com.quizz.i2;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.jdbc.core.JdbcTemplate;
-
-import com.quizz.i2.entities.Answer;
-import com.quizz.i2.entities.Choice;
-import com.quizz.i2.entities.Etudiant;
-import com.quizz.i2.entities.Professeur;
-import com.quizz.i2.entities.Question;
-import com.quizz.i2.entities.Quizz;
-import com.quizz.i2.entities.QuizzAttempt;
 import com.quizz.i2.services.EtudiantServices;
 import com.quizz.i2.services.ProfesseurServices;
 import com.quizz.i2.services.QuizzAttemptServices;

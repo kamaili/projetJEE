@@ -74,7 +74,7 @@ public class EtudiantServicesImpl implements EtudiantServices{
         for (Answer answer:answers){
             List<Choice> choices = answer.getSelectedChoices();
             for (Choice choice:choices){
-                if(! choice.isCorrect()){
+                if(! choice.getIsCorrect()){
                     totalCorrect--; // soustraire 1 ici et l'ajouter après ==> 0 
                     break;
                 }

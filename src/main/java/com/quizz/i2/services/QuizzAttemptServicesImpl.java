@@ -20,7 +20,7 @@ public class QuizzAttemptServicesImpl implements QuizzAttemptServices{
     @Autowired
     QuizzAttemptRepository quizzAttemptRep;
 
-    public void setAnswer(QuizzAttempt quizzAttempt, Question question, List<Choice> choices) {
+    public Answer setAnswer(QuizzAttempt quizzAttempt, Question question, List<Choice> choices) {
        Answer answer = answerRep.findByQuestionIdAndQuizzAttemptId(quizzAttempt.getId(),question.getId());
        if(answer == null){
         QuizzAttempt qAttempt = quizzAttemptRep.findById(1L).orElseThrow(() -> new RuntimeException("QuizzAttempt not found"));
@@ -28,6 +28,7 @@ public class QuizzAttemptServicesImpl implements QuizzAttemptServices{
        }
        answer.setSelectedChoices(choices);
        answerRep.save(answer);
+       return answer;
     }
 
     

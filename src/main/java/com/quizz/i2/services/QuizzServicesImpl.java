@@ -2,7 +2,6 @@ package com.quizz.i2.services;
 
 import java.util.List;
 
-import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -36,6 +35,9 @@ public class QuizzServicesImpl implements QuizzServices{
     @Override
     public void ajouterQuestion(Quizz quizz, Question question, List<Choice> choices) {
         question.setQuizz(quizz);
+        for (Choice choice : choices) {
+            choice.setQuestion(question);
+        }
         question.setChoices(choices);
         questionRep.save(question);
         quizz.getQuestions().add(question);

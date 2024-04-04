@@ -46,7 +46,7 @@ public class QuizzController {
     }
 
     @PostMapping("{quizzId}/addquestion")
-    public ResponseEntity<?> creerQuestion(@PathVariable Long quizzId, @RequestBody Question question) {
+    public ResponseEntity<?> creerQuestion(@PathVariable Long quizzId, @RequestBody Question question ) {
         Optional<Quizz> quizz = quizzRepository.findById(quizzId);
         if(! quizz.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("quizz not found");

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -69,11 +70,9 @@ public class EtudiantController {
         return ResponseEntity.ok(score);
     }
 
-    @PostMapping("/joinquizz")
+    @PostMapping("{etudiantId}/joinquizz/{token}")
     // must add token <key,value> to the student json object
-    public ResponseEntity<?> rejoindreQuizz(@RequestBody Map<String, String> requestBody) {
-        Long etudiantId = Long.parseLong(requestBody.get("id"));
-        String token = requestBody.get("token");
+    public ResponseEntity<?> rejoindreQuizz(@PathVariable Long etudiantId, @PathVariable String token) {
 
         Optional<Etudiant> etudiant = etudiantRep.findById(etudiantId);
         if (!etudiant.isPresent())
