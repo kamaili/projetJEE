@@ -18,7 +18,7 @@ import lombok.NoArgsConstructor;
 @DiscriminatorValue(value = "PROF")
 public class Professeur extends Utilisateur{
 
-
+    private String departement;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "professeur")
     private List<Quizz> createdQuizzes;
 }

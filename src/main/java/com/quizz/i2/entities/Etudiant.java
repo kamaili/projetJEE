@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @DiscriminatorValue(value = "ETUD")
 public class Etudiant extends Utilisateur{
-    
+    private String classe;
     @OneToMany(cascade = CascadeType.ALL,mappedBy = "etudiant")
     private List<QuizzAttempt> takenQuizzes = new ArrayList<>();
 

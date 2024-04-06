@@ -1,7 +1,5 @@
 package com.quizz.i2.entities;
 
-import java.util.Date;
-
 import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -24,9 +22,11 @@ public abstract class Utilisateur {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String name;
+    private String firstname;
     private String lastname;
-    private Date birthdate;
+    private String email;
     private String username;
+    private String gender;
     private String password;
+    private String etablissement;
 }
