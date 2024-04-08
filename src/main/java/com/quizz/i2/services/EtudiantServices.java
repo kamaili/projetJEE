@@ -10,7 +10,7 @@ public interface EtudiantServices {
 
 	public Etudiant SaveEtudiant(Etudiant etudiant);
 	public int consulterScore(Etudiant etudiant, Quizz quizz);
-	public QuizzAttempt rejoindreQuizz(Etudiant etudiant,String token);
+	public QuizzAttempt rejoindreQuizz(Etudiant etudiant,Quizz quizz);
 	public void QuitterQuiz(Etudiant etudiant,Quizz quizz);
 	public Etudiant modifyEtudiant(Etudiant etudiant);
 }

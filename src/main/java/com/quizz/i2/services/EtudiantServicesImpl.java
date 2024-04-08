@@ -32,8 +32,7 @@ public class EtudiantServicesImpl implements EtudiantServices{
 		}
 		return etRep.save(etudiant);
 	}
-	public QuizzAttempt rejoindreQuizz(Etudiant etudiant, String token) {
-		Quizz quizz= quizzRep.findByToken(token).orElseThrow(() -> new RuntimeException("Quizz not found"));
+	public QuizzAttempt rejoindreQuizz(Etudiant etudiant, Quizz quizz) {
 		// vérifier d'abord que cet etudiant n'est pas déjà rejoint ce quizz
 		Optional<QuizzAttempt> quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId());
 		if(quizzAttempt.isPresent())

@@ -1,5 +1,6 @@
 package com.quizz.i2.controllers;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -18,6 +19,7 @@ import com.quizz.i2.entities.Etudiant;
 import com.quizz.i2.entities.Quizz;
 import com.quizz.i2.entities.QuizzAttempt;
 import com.quizz.i2.repositories.EtudiantRepository;
+import com.quizz.i2.repositories.QuizzAttemptRepository;
 import com.quizz.i2.repositories.QuizzRepository;
 import com.quizz.i2.services.EtudiantServices;
 
@@ -30,6 +32,8 @@ public class EtudiantController {
     private EtudiantRepository etudiantRep;
     @Autowired
     private QuizzRepository quizzRep;
+    @Autowired
+    private QuizzAttemptRepository quizzAttemptRepository;
 
     @PostMapping("/save")
     public ResponseEntity<?> saveStudent(@RequestBody Etudiant student) {
@@ -84,15 +88,30 @@ public class EtudiantController {
     public ResponseEntity<?> rejoindreQuizz(@PathVariable Long etudiantId, @PathVariable String token) {
 
         Optional<Etudiant> etudiant = etudiantRep.findById(etudiantId);
+        Optional<Quizz> quizz = quizzRep.findByToken(token);
         if (!etudiant.isPresent())
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Etudiant n'existe pas");
+        if (!quizz.isPresent())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quizz n'existe pas");
+        
+         int participantsNbr = quizzAttemptRepository.findByQuizz(quizz.get()).size();
+        if (participantsNbr >= quizz.get().getMaxParticipations())
+            return ResponseEntity.status(HttpStatus.NOT_ACCEPTABLE).body("max join reached");
+        
         QuizzAttempt quizzAttempt;
         try {
-            quizzAttempt = studentService.rejoindreQuizz(etudiant.get(), token);
+            quizzAttempt = studentService.rejoindreQuizz(etudiant.get(), quizz.get());
         } catch (RuntimeException exp) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exp.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(exp.getMessage());
         }
-        return ResponseEntity.ok(quizzAttempt);
+        Map<String,String> response = new HashMap<>();
+        response.put("id", "123");
+        response.put("quizzTitle", quizzAttempt.getQuizz().getTitle());
+        response.put("teacherName", quizzAttempt.getQuizz().getProfesseur().getUsername());
+        response.put("duration", ""+quizzAttempt.getQuizz().getDuration());
+        response.put("questionsCount", ""+quizzAttempt.getQuizz().getQuestions().size());
+        response.put("maxParticipations", ""+quizzAttempt.getQuizz().getMaxParticipations());
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/quitquizz")

@@ -28,6 +28,7 @@ public class Quizz {
     private int duration;
     private String token;
     private boolean started;
+    private int maxParticipations;
 
     @ManyToOne
     private Professeur professeur;
