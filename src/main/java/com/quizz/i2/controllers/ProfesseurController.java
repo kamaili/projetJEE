@@ -1,5 +1,6 @@
 package com.quizz.i2.controllers;
 
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,6 +37,15 @@ public class ProfesseurController {
         }catch(RuntimeException exp){
             return ResponseEntity.status(HttpStatus.CONFLICT).body(exp.getMessage());
         }
+        return ResponseEntity.ok(prof);
+    }
+    @PostMapping("/connect")
+    public ResponseEntity<?> connectProfesseur(@RequestBody Map<String, String> RequestBody) {
+        String username = RequestBody.get("username");
+        String password = RequestBody.get("password");
+        Optional<Professeur> prof = profRep.findByUsernameAndPassword(username, password);
+        if(! prof.isPresent())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("professeur not found");
         return ResponseEntity.ok(prof);
     }
     @PostMapping("/update")

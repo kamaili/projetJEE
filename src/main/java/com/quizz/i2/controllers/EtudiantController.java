@@ -41,6 +41,15 @@ public class EtudiantController {
         }
         return ResponseEntity.ok(etudiant);
     }
+    @PostMapping("/connect")
+    public ResponseEntity<?> connectStudent(@RequestBody Map<String, String> RequestBody) {
+        String username = RequestBody.get("username");
+        String password = RequestBody.get("password");
+        Optional<Etudiant> etudiant = etudiantRep.findByUsernameAndPassword(username, password);
+        if(! etudiant.isPresent())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("student not found");
+        return ResponseEntity.ok(etudiant);
+    }
     @PostMapping("/modify")
     public ResponseEntity<?> modifyStudent(@RequestBody Etudiant student) {
         Optional<Etudiant> etud = etudiantRep.findById(student.getId());
