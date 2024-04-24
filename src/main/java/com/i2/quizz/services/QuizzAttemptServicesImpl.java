@@ -1,10 +1,12 @@
 package com.i2.quizz.services;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import com.i2.quizz.DTO.AnswerDto;
@@ -81,7 +83,13 @@ public class QuizzAttemptServicesImpl implements QuizzAttemptServices{
                     rank ++ ;
             }
         }
-        return Map.of("score",score,"questionsCount",questionsCount,"competitorsCount",competitorsCount,"rank",rank,"cheated",cheated);
+        Map<String, Integer> response = new HashMap<>();
+        response.put("score", score);
+        response.put("questionsCount", questionsCount);
+        response.put("competitorsCount", competitorsCount);
+        response.put("rank", rank);
+        response.put("cheated", cheated);
+        return response;    
     }
     
 

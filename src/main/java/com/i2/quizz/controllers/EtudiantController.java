@@ -48,7 +48,7 @@ public class EtudiantController {
         try{
             etudiant = studentService.SaveEtudiant(student);
         }catch(RuntimeException exp){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(exp.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(exp.getMessage()); // username already exists
         }
         return ResponseEntity.ok(etudiant.toDto());
     }

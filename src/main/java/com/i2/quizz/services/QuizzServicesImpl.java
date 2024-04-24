@@ -21,6 +21,7 @@ import com.i2.quizz.entities.Professeur;
 import com.i2.quizz.entities.Question;
 import com.i2.quizz.entities.Quizz;
 import com.i2.quizz.entities.QuizzAttempt;
+import com.i2.quizz.repositories.AnswerRepository;
 import com.i2.quizz.repositories.ChoiceRepository;
 import com.i2.quizz.repositories.EtudiantRepository;
 import com.i2.quizz.repositories.ProfesseurRepository;
@@ -44,6 +45,8 @@ public class QuizzServicesImpl implements QuizzServices{
     QuizzAttemptRepository quizzAttemptRepository;
     @Autowired
     EtudiantRepository etudiantRepository;
+    @Autowired
+    private AnswerRepository answerRepository;
         
 
     
@@ -164,18 +167,23 @@ public class QuizzServicesImpl implements QuizzServices{
     public List<Map<String,Object>> getProgress(Quizz quizz){
         List<QuizzAttempt> quizzAttempts = quizzAttemptRepository.findByQuizz(quizz);
         List<Map<String,Object>> result = new ArrayList<>();
+        List<Question> questionsToAnswer = quizz.getQuestions();
         for(QuizzAttempt quizzAttempt: quizzAttempts){
             EtudiantDto etudiantDto = quizzAttempt.getEtudiant().toDto();
             List<Boolean> progress = new ArrayList<>();
             Map<String, Object> map = new HashMap<>();
             map.put("student", etudiantDto);
             map.put("cheated", quizzAttempt.isCheated());
-            List<Answer> listAnswers = quizzAttempt.getAnswers();
-            for(Answer answer : listAnswers){
+            for(Question question : questionsToAnswer){
+                Optional<Answer> answer = answerRepository.findByQuestion(question);
+                if( ! answer.isPresent()){
+                    progress.add(null);
+                    continue;
+                }
                 List <Choice> choices = new ArrayList<>();
-                for(Choice choice : answer.getSelectedChoices())
+                for(Choice choice : answer.get().getSelectedChoices())
                     choices.add(choicesRep.findById(choice.getId()).get());
-                List <Choice> correctChoices = choicesRep.findByQuestionAndIsCorrect(answer.getQuestion(), true);
+                List <Choice> correctChoices = choicesRep.findByQuestionAndIsCorrect(question, true);
                 progress.add(correctChoices.containsAll(choices));
             }
             map.put("progress", progress);

@@ -42,9 +42,9 @@ public class ProfesseurController {
         try{
             prof = profServices.enregistrerProfesseur(professeur);
         }catch(RuntimeException exp){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(exp.getMessage());
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(exp.getMessage());  // username already exists
         }
-        return ResponseEntity.ok(prof);
+        return ResponseEntity.ok(prof.toDto());
     }
     @PostMapping("/connect")
     public ResponseEntity<?> connectProfesseur(@RequestBody Map<String, String> RequestBody) {
@@ -75,7 +75,16 @@ public class ProfesseurController {
 
     
 
-    
+    @GetMapping("/{professeurId}/createdquizzes")
+    public ResponseEntity<?> getQuizzes(@PathVariable Long professeurId) {
+        Optional<Professeur> professeur = profRep.findById(professeurId);
+        if(! professeur.isPresent())
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("professeur not exists");
+        List<QuizzDto> list_quizzes = new ArrayList<>();
+        for(Quizz quizz:professeur.get().getCreatedQuizzes())
+            list_quizzes.add(quizz.toDto());
+        return ResponseEntity.ok(list_quizzes);
+    }
     
 
 

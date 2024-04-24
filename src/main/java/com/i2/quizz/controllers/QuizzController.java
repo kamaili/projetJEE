@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.i2.quizz.DTO.EtudiantDto;
 import com.i2.quizz.DTO.QuestionDto;
+import com.i2.quizz.DTO.QuizzAttemptDto;
 import com.i2.quizz.entities.Etudiant;
 import com.i2.quizz.entities.Professeur;
 import com.i2.quizz.entities.Question;
@@ -189,8 +190,8 @@ public class QuizzController {
         return ResponseEntity.ok(quizzServices.getProgress(quizz));
     }
     @GetMapping("{quizzId}/get_attempt/{etudiantId}")
-    public ResponseEntity<QuizzAttempt> geAttempt(@PathVariable Long quizzId, @PathVariable Long etudiantId) {
-        return ResponseEntity.ok(quizzAttemptRepository.findByEtudiantIdAndQuizzId(etudiantId, quizzId).get());
+    public ResponseEntity<QuizzAttemptDto> geAttempt(@PathVariable Long quizzId, @PathVariable Long etudiantId) {
+        return ResponseEntity.ok(quizzAttemptRepository.findByEtudiantIdAndQuizzId(etudiantId, quizzId).get().toDto());
     }
     
     
