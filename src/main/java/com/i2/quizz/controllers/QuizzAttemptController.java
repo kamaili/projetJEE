@@ -1,6 +1,7 @@
 package com.i2.quizz.controllers;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -77,8 +78,9 @@ public class QuizzAttemptController {
         Question question = questionRepository.findById(questionId).get();
         
         quizzAttemptServices.deleteAnswer(quizzAttempt, question);
-        
-        return ResponseEntity.ok(java.util.Map.of("message" , "answer deleted"));
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "answer deleted");
+        return ResponseEntity.ok(response);
     }
     @GetMapping("/{quizzAttemptId}/scoring")
     public ResponseEntity<Map<String,Integer>> getScoring(@PathVariable Long quizzAttemptId) {
@@ -90,7 +92,9 @@ public class QuizzAttemptController {
         QuizzAttempt quizzAttempt = quizzAttemptRepository.findById(quizzAttemptId).get();
         quizzAttempt.setCheated(true);
         quizzAttemptRepository.save(quizzAttempt);
-        return ResponseEntity.ok(true);
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "cheating attempt reported");
+        return ResponseEntity.ok(response);
     }
 
     

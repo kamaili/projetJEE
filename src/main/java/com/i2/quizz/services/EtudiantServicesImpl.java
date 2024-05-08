@@ -27,13 +27,9 @@ public class EtudiantServicesImpl implements EtudiantServices{
 	
 	
 	public Etudiant SaveEtudiant(Etudiant etudiant) {
-		if(etRep.existsByUsername(etudiant.getUsername())){
-			throw new RuntimeException("Username already exists !!");
-		}
 		return etRep.save(etudiant);
 	}
 	public QuizzAttempt rejoindreQuizz(Etudiant etudiant, Quizz quizz) {
-		// vérifier d'abord que cet etudiant n'est pas déjà rejoint ce quizz
 		QuizzAttempt newTakenQuizz = new QuizzAttempt();
 		newTakenQuizz.setQuizz(quizz);
 		newTakenQuizz.setEtudiant(etudiant);
@@ -45,21 +41,18 @@ public class EtudiantServicesImpl implements EtudiantServices{
 
 
 	public void QuitterQuiz(Etudiant etudiant,Quizz quizz) {
-		QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId()).orElseThrow(() -> new RuntimeException("this student not taked this quizz")); 
+		QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId()).get();
 		etudiant.getTakenQuizzes().remove(quizzAttempt);
 		etRep.save(etudiant);
 		quizzAttemptRep.delete(quizzAttempt);
 	}
 
 	public Etudiant modifyEtudiant(Etudiant etudiant) {
-		if(etRep.existsByUsername(etudiant.getUsername())){
-			throw new RuntimeException("The new username already exists !!");
-		}
 		return etRep.save(etudiant);
 	}
 
 	public int consulterScore(Etudiant etudiant, Quizz quizz) {
-		QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId()).orElseThrow(() -> new RuntimeException("this student not taked this quizz"));
+		QuizzAttempt quizzAttempt = quizzAttemptRep.findByEtudiantIdAndQuizzId(etudiant.getId(), quizz.getId()).get();
         List<Answer> answers = quizzAttempt.getAnswers();
         int totalCorrect=0;
         for (Answer answer:answers){

@@ -33,8 +33,6 @@ public class Etudiant extends Utilisateur{
         dto.setGender(super.getGender());
         dto.setFirstname(super.getFirstname());
         dto.setLastname(super.getLastname());
-        // dto.setPassword(super.getPassword());  pas utile
-        dto.setRememberMeToken(super.getRememberMeToken());
         dto.setUsername(super.getUsername());
         for(QuizzAttempt quizzAttempt:takenQuizzes)
             dto.getTakenQuizzes().add(quizzAttempt.toDto());

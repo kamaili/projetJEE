@@ -70,24 +70,16 @@ public class QuizzAttemptServicesImpl implements QuizzAttemptServices{
     public Map<String,Integer> getScoring(QuizzAttempt quizzAttempt){
         int score = quizzAttempt.getScore();
         int questionsCount = quizzAttempt.getQuizz().getQuestions().size();
-        int rank = 0 ;
         int cheated = quizzAttempt.isCheated() ? 1 : 0;
 
         List<QuizzAttempt> list = quizzAttemptRep.findByQuizz(quizzAttempt.getQuizz());
 
         int competitorsCount = list.size();
-        if( ! quizzAttempt.getQuizz().isFinished()){
-            rank = list.size();
-            for(QuizzAttempt qAtt:list){
-                if (score < qAtt.getScore())
-                    rank ++ ;
-            }
-        }
+
         Map<String, Integer> response = new HashMap<>();
         response.put("score", score);
         response.put("questionsCount", questionsCount);
         response.put("competitorsCount", competitorsCount);
-        response.put("rank", rank);
         response.put("cheated", cheated);
         return response;    
     }

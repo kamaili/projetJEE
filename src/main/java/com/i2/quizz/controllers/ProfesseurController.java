@@ -33,17 +33,17 @@ public class ProfesseurController {
     private ProfesseurServices profServices;
     @Autowired
     private ProfesseurRepository profRep;
-    @Autowired
-    private QuizzRepository quizzRep;
 
     @PostMapping("/save")
     public ResponseEntity<?> saveProf(@RequestBody Professeur professeur) {
-        Professeur prof;
-        try{
-            prof = profServices.enregistrerProfesseur(professeur);
-        }catch(RuntimeException exp){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(exp.getMessage());  // username already exists
+        if(profRep.existsByUsername(professeur.getUsername()))
+        {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "username already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
+        
+        Professeur prof= profServices.enregistrerProfesseur(professeur);
         return ResponseEntity.ok(prof.toDto());
     }
     @PostMapping("/connect")
@@ -51,52 +51,34 @@ public class ProfesseurController {
         String username = RequestBody.get("username");
         String password = RequestBody.get("password");
         Optional<Professeur> prof = profRep.findByUsernameAndPassword(username, password);
-        if(! prof.isPresent())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("professeur not found");
-        prof.get().setRememberMeToken(generateRememberMeToken());
-        profRep.save(prof.get());
+        if(! prof.isPresent()){
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Wrong username or password");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
         return ResponseEntity.ok(prof.get().toDto());
     }
-    @PostMapping("/update")
+    @PostMapping("/modify")
     public ResponseEntity<?> modifierProfesseur(@RequestBody Professeur professeur) {
-        Optional<Professeur> prof = profRep.findById(professeur.getId());
-        if (! prof.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("professeur not exists");
+        if(profRep.existsByUsername(professeur.getUsername()))
+        {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "username already used");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
-        Professeur newProf;
-        try{
-            newProf = profServices.modifierProfesseur(professeur);
-        }catch(RuntimeException exp){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(exp.getMessage());
-        }
-        return ResponseEntity.ok(newProf);
+        Professeur newProf = profServices.modifierProfesseur(professeur);
+        return ResponseEntity.ok(newProf.toDto());
     }
 
     
 
     @GetMapping("/{professeurId}/createdquizzes")
     public ResponseEntity<?> getQuizzes(@PathVariable Long professeurId) {
-        Optional<Professeur> professeur = profRep.findById(professeurId);
-        if(! professeur.isPresent())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("professeur not exists");
+        Professeur professeur = profRep.findById(professeurId).get();
         List<QuizzDto> list_quizzes = new ArrayList<>();
-        for(Quizz quizz:professeur.get().getCreatedQuizzes())
+        for(Quizz quizz:professeur.getCreatedQuizzes())
             list_quizzes.add(quizz.toDto());
         return ResponseEntity.ok(list_quizzes);
     }
     
-
-
-
-
-
-
-
-
-
-    private String generateRememberMeToken() {
-        // Generate a random token (e.g., UUID)
-        return UUID.randomUUID().toString();
-    }
 }

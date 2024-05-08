@@ -44,12 +44,13 @@ public class EtudiantController {
     
     @PostMapping("/save")
     public ResponseEntity<?> saveStudent(@RequestBody Etudiant student) {
-        Etudiant etudiant;
-        try{
-            etudiant = studentService.SaveEtudiant(student);
-        }catch(RuntimeException exp){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(exp.getMessage()); // username already exists
+        if(etudiantRep.existsByUsername(student.getUsername()))
+        {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "username already exists");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
+        Etudiant etudiant = studentService.SaveEtudiant(student);
         return ResponseEntity.ok(etudiant.toDto());
     }
     @PostMapping("/connect")
@@ -57,62 +58,40 @@ public class EtudiantController {
         String username = RequestBody.get("username");
         String password = RequestBody.get("password");
         Optional<Etudiant> etudiant = etudiantRep.findByUsernameAndPassword(username, password);
-        if(! etudiant.isPresent())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("student not found");
-        etudiant.get().setRememberMeToken(generateRememberMeToken());
-        Etudiant etud = etudiantRep.save(etudiant.get());
-        return ResponseEntity.ok(etud.toDto());
+        if(! etudiant.isPresent()){
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "Wrong username or password");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        }
+        return ResponseEntity.ok(etudiant.get().toDto());
     }
     @PostMapping("/modify")
     public ResponseEntity<?> modifyStudent(@RequestBody Etudiant student) {
-        Optional<Etudiant> etud = etudiantRep.findById(student.getId());
-        if (! etud.isPresent()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body("Student not exists");
+        
+        if(etudiantRep.existsByUsername(student.getUsername()))
+        {
+            Map<String, String> response = new HashMap<>();
+            response.put("message", "username already used");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
         }
-        Etudiant newEtudiant;
-        try{
-            newEtudiant = studentService.modifyEtudiant(student);
-        }catch(RuntimeException exp){
-            return ResponseEntity.status(HttpStatus.CONFLICT).body(exp.getMessage());
-        }
+        Etudiant newEtudiant = studentService.modifyEtudiant(student);
         return ResponseEntity.ok(newEtudiant);
     }
 
     @GetMapping("/score")
     public ResponseEntity<?> consulterScore(@RequestParam Long etudiantId, @RequestParam Long quizzId) {
-        Optional<Etudiant> etudiant = etudiantRep.findById(etudiantId);
-        if (!etudiant.isPresent())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Etudiant n'existe pas");
-        Optional<Quizz> quizz = quizzRep.findById(quizzId);
-        if (!quizz.isPresent())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Quizz n'existe pas");
-
-        int score = studentService.consulterScore(etudiant.get(), quizz.get());
+        Etudiant etudiant = etudiantRep.findById(etudiantId).get();
+        Quizz quizz = quizzRep.findById(quizzId).get();
+        int score = studentService.consulterScore(etudiant, quizz);
         return ResponseEntity.ok(score);
     }
     @GetMapping("/{etudiantId}/taken_quizzes")
     public ResponseEntity<?> getQuizzes(@PathVariable Long etudiantId) {
-        Optional<Etudiant> etudiant = etudiantRep.findById(etudiantId);
-        if(! etudiant.isPresent())
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("etudiant not exists");
+        Etudiant etudiant = etudiantRep.findById(etudiantId).get();
         List<QuizzDto> list_quizzes = new ArrayList<>();
-        for(QuizzAttempt quizzAttempt:etudiant.get().getTakenQuizzes())
+        for(QuizzAttempt quizzAttempt:etudiant.getTakenQuizzes())
             list_quizzes.add(quizzAttempt.getQuizz().toDto());
         return ResponseEntity.ok(list_quizzes);
     }
 
-   
-
-
-
-
-
-
-
-
-    private String generateRememberMeToken() {
-        // Generate a random token (e.g., UUID)
-        return UUID.randomUUID().toString();
-    }
 }

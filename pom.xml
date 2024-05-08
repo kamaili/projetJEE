@@ -17,6 +17,7 @@
 	<properties>
 		<java.version>17</java.version>
 	</properties>
+	
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -53,7 +54,11 @@
 			<artifactId>spring-webmvc</artifactId>
 			<version>6.1.6</version>
 		</dependency>
-
+		<!-- <dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-docker-compose</artifactId>
+			<version>3.1.1</version>
+		</dependency> -->
 	</dependencies>
 
 	<build>
@@ -62,6 +67,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 				<configuration>
+					<mainClass>com.i2.quizz.I2Application</mainClass>
 					<excludes>
 						<exclude>
 							<groupId>org.projectlombok</groupId>

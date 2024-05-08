@@ -34,8 +34,6 @@ public class Professeur extends Utilisateur{
         dto.setGender(super.getGender());
         dto.setFirstname(super.getFirstname());
         dto.setLastname(super.getLastname());
-        // dto.setPassword(super.getPassword());  pas utile
-        dto.setRememberMeToken(super.getRememberMeToken());
         dto.setUsername(super.getUsername());
         for(Quizz quizz:createdQuizzes)
             dto.getCreatedQuizzes().add(quizz.toDto());

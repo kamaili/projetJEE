@@ -25,5 +25,4 @@ public abstract class UtilisateurDto {
     private String gender;
     private String password;
     private String etablissement;
-    private String rememberMeToken;
 }
