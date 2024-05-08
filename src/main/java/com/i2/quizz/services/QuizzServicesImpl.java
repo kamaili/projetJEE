@@ -76,7 +76,6 @@ public class QuizzServicesImpl implements QuizzServices{
         quizz.setProfesseur(prof);
         List<Question> questions = new ArrayList<>();
         for(Map<String,Object> questionData: (ArrayList<Map<String,Object>>) quizzData.get("questions")){
-            System.out.println(questionData);
             Question question = new Question();
             question.setText((String) questionData.get("text"));
 
@@ -175,13 +174,19 @@ public class QuizzServicesImpl implements QuizzServices{
             map.put("student", etudiantDto);
             map.put("cheated", quizzAttempt.isCheated());
             for(Question question : questionsToAnswer){
-                Optional<Answer> answer = answerRepository.findByQuestion(question);
-                if( ! answer.isPresent()){
+                Answer answer = null;
+                for(Answer ans : quizzAttempt.getAnswers()){
+                    if(ans.getQuestion().getId() == question.getId()){
+                        answer = ans;
+                        break;
+                    }
+                }
+                if( answer == null){
                     progress.add(null);
                     continue;
                 }
                 List <Choice> choices = new ArrayList<>();
-                for(Choice choice : answer.get().getSelectedChoices())
+                for(Choice choice : answer.getSelectedChoices())
                     choices.add(choicesRep.findById(choice.getId()).get());
                 List <Choice> correctChoices = choicesRep.findByQuestionAndIsCorrect(question, true);
                 progress.add(correctChoices.containsAll(choices));
